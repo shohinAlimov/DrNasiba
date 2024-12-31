@@ -1,0 +1,25 @@
+.header {
+  background-color: $color-cabaret;
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__link,
+  &__divider {
+    color: $color-white;
+  }
+
+  &__link--active {
+    font-weight: 700;
+  }
+
+}
