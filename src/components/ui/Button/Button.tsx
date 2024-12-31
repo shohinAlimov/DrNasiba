@@ -1,6 +1,5 @@
 import { FC, MouseEventHandler } from 'react';
 
-import './Button.css';
 import { Loader } from '../Loader/Loader';
 
 export interface IButtonProps {
@@ -11,6 +10,7 @@ export interface IButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   isLoading?: boolean;
   isDisabled?: boolean;
+  className?: string; // Allow passing additional classes
 }
 
 export const Button: FC<IButtonProps> = ({
@@ -21,8 +21,10 @@ export const Button: FC<IButtonProps> = ({
   isDisabled,
   variant = '',
   size = '',
+  className = '', // Default to an empty string
 }) => {
-  const classNames = `btn button ${variant && `button--${variant}`} ${size && `button--${size}`}`.trim();
+  // Merge custom className with existing class logic
+  const classNames = `btn ${variant && `btn--${variant}`}${size && `btn--${size}`} ${className}`.trim();
 
   return (
     <button

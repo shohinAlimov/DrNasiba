@@ -1,0 +1,11 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  & input {
+    outline: none;
+    border: 2px solid $color-cabaret;
+    border-radius: 8px;
+    padding: 10px;
+  }
+}

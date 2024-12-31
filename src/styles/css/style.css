@@ -480,4 +480,118 @@ textarea {
     background-size: 8px 100%, 8px 4px, 8px 4px, 8px 100%, 8px 4px, 8px 4px, 8px 100%, 8px 4px, 8px 4px;
     background-position: 0 50%, 0 calc(0% - 2px), 0 calc(100% + 2px), 50% 50%, 50% calc(0% - 2px), 50% calc(100% + 2px), 100% 50%, 100% calc(0% - 2px), 100% calc(100% + 2px);
   }
+}
+.btn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform ease-in 0.3s;
+}
+.btn--primary {
+  background-color: #D95B6D;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+}
+.btn--primary:hover {
+  transform: translateY(-2px);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+.form-field input {
+  outline: none;
+  border: 2px solid #D95B6D;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.appointments-form {
+  margin: 30px 0 0 0;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 50px;
+}
+.appointments-form__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 300px;
+}
+.appointments-form__submit {
+  margin: auto 0 0;
+}
+
+.data-choice__title {
+  margin: 0;
+}
+.data-choice__date {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  justify-content: space-between;
+  margin: 10px 0 0 0;
+  max-width: 400px;
+}
+
+.calendar {
+  max-width: 400px;
+  width: 100%;
+  border-collapse: collapse;
+}
+.calendar__header {
+  border: none;
+}
+.calendar__row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #ffffff;
+  border: none;
+}
+.calendar__day {
+  padding: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  background-color: #fff;
+}
+.calendar__body {
+  display: grid;
+  grid-template-rows: repeat(auto-fill, 1fr);
+  width: 100%;
+}
+.calendar__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.calendar__cell {
+  padding: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calendar__button {
+  background-color: #ffffff;
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+}
+.calendar__button--empty {
+  background-color: #ffffff;
+}
+.calendar__button--filled {
+  position: relative;
+  background-color: #D95B6D;
+  color: #ffffff;
+  transition: background-color ease-in 0.3s;
+}
+.calendar__button--filled:hover {
+  background-color: #AF4D5B;
 }/*# sourceMappingURL=style.css.map */

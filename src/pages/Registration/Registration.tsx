@@ -1,4 +1,4 @@
-import { Header } from "../../ui/Header/Header";
+import { Header } from "../../components/ui/Header/Header";
 
 export const Registration = () => {
   return (
