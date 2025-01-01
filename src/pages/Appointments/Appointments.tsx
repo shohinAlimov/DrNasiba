@@ -1,4 +1,4 @@
-import { AppointmentsForm } from "../../components/features/appointments/AppointmentsForm";
+import { AppointmentForm } from "../../components/features/Consultation/Consultation";
 import { Header } from "../../components/ui/Header/Header";
 
 export const Appointments = () => {
@@ -8,7 +8,7 @@ export const Appointments = () => {
       <main>
         <section className="appointments">
           <div className="container">
-            <AppointmentsForm />
+            <AppointmentForm />
           </div>
         </section>
       </main>

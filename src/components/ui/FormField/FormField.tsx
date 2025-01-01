@@ -4,6 +4,7 @@ export interface IFormFieldProps {
   label: string;
   children: ReactNode;
   errorMessage?: string;
+  className?: string;
 }
 
 export const FormField: FC<IFormFieldProps> = ({
