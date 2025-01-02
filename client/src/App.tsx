@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Account from "./pages/Account/Account";
 import { Header } from "./ui/Header";
 import Appointments from "./pages/Appointments";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/account" element={<Account />} />
         <Route path="/appointments" element={<Appointments />} />
+        <Route path="/about" element={<About />} />
         <Route path="/" element={<h1>Welcome to the Home Page</h1>} />
       </Routes>
     </>

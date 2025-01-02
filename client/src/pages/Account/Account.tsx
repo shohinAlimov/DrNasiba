@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { FormField } from "../../ui/FormField";
 import { Button } from "../../ui/Button";
 import { AccountDetails } from "./type";
+import { useAuth } from "../../context/AuthContext"; // Import useAuth
 
 const Account: React.FC = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth(); // Get the logout function from AuthContext
   const [formData, setFormData] = useState<AccountDetails>({
     name: "",
     surname: "",
@@ -26,8 +28,8 @@ const Account: React.FC = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Remove the token
-    navigate("/login"); // Redirect to login
+    logout(); // Call the AuthContext's logout function
+    navigate("/login"); // Redirect to the login page
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -77,11 +79,7 @@ const Account: React.FC = () => {
             />
           </FormField>
           <FormField label="Логотип">
-            <input
-              type="file"
-              name="logo"
-              onChange={handleFileChange}
-            />
+            <input type="file" name="logo" onChange={handleFileChange} />
           </FormField>
           <Button type="submit" title="Сохранить" variant="primary" />
         </form>

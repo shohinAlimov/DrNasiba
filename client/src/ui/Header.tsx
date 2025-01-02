@@ -11,17 +11,26 @@ export const Header = () => {
           <nav className="navigation">
             <ul className="navigation__list">
               <li className="navigation__item">
-                <NavLink to="/" className={({ isActive }) => isActive ? "navigation__link--active" : "navigation__link"}>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
+                >
                   Домой
                 </NavLink>
               </li>
               <li className="navigation__item">
-                <NavLink to="/Appointments" className={({ isActive }) => isActive ? "navigation__link--active" : "navigation__link"}>
+                <NavLink
+                  to="/Appointments"
+                  className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
+                >
                   Запись
                 </NavLink>
               </li>
               <li className="navigation__item">
-                <NavLink to="/About" className={({ isActive }) => isActive ? "navigation__link--active" : "navigation__link"}>
+                <NavLink
+                  to="/About"
+                  className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
+                >
                   О нас
                 </NavLink>
               </li>
@@ -29,16 +38,25 @@ export const Header = () => {
           </nav>
           <div className="header__inner">
             {isLoggedIn ? (
-              <NavLink to="/Account" className={({ isActive }) => isActive ? "navigation__link--active" : "navigation__link"}>
+              <NavLink
+                to="/Account"
+                className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
+              >
                 Аккаунт
               </NavLink>
             ) : (
               <>
-                <NavLink to="/Login" className={({ isActive }) => isActive ? "header__link--active" : "header__link"}>
+                <NavLink
+                  to="/Login"
+                  className={({ isActive }) => (isActive ? "header__link--active" : "header__link")}
+                >
                   Логин
                 </NavLink>
                 <span className="header__divider">/</span>
-                <NavLink to="/Register" className={({ isActive }) => isActive ? "header__link--active" : "header__link"}>
+                <NavLink
+                  to="/Register"
+                  className={({ isActive }) => (isActive ? "header__link--active" : "header__link")}
+                >
                   Регистрация
                 </NavLink>
               </>

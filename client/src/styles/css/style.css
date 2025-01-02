@@ -449,6 +449,7 @@ textarea {
   color: #ffffff;
 }
 .navigation__link--active {
+  color: #ffffff;
   font-weight: 700;
 }
 
