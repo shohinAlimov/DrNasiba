@@ -2,8 +2,9 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../backend/services/api";
-import { FormField } from "../components/FormField";
-import { Button } from "../components/Button";
+import { FormField } from "../ui/FormField";
+import { Button } from "../ui/Button";
+import { useAuth } from "../context/AuthContext";
 
 interface RegisterFormInputs {
   email: string;
@@ -15,6 +16,7 @@ const Register: React.FC = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormInputs>();
   const navigate = useNavigate();
   const password = watch("password");
+  const { login } = useAuth(); // Move useAuth call here
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     try {
@@ -24,7 +26,8 @@ const Register: React.FC = () => {
       });
       const token = response.data.token; // Assuming the server sends back a token
       localStorage.setItem("authToken", token); // Save the token
-      navigate("/"); // Redirect to home
+      login(); // Update context
+      navigate("/account"); // Redirect to account page
     } catch (error: any) {
       alert(error.response?.data?.error || "Ошибка при регистрации!");
     }
@@ -71,7 +74,7 @@ const Register: React.FC = () => {
               />
               {errors.confirmPassword && <span className="form__error">{errors.confirmPassword.message}</span>}
             </FormField>
-            <Button type="submit" title="Регистрация" variant="primary"></Button>
+            <Button type="submit" title="Регистрация" variant="primary" />
           </form>
         </div>
       </div>

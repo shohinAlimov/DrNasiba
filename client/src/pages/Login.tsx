@@ -2,8 +2,9 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../backend/services/api";
-import { FormField } from "../components/FormField";
-import { Button } from "../components/Button";
+import { FormField } from "../ui/FormField";
+import { Button } from "../ui/Button";
+import { useAuth } from "../context/AuthContext";
 
 interface LoginFormInputs {
   email: string;
@@ -11,8 +12,9 @@ interface LoginFormInputs {
 }
 
 const Login: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginFormInputs>();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
@@ -22,9 +24,15 @@ const Login: React.FC = () => {
       });
       const token = response.data.token;
       localStorage.setItem("authToken", token); // Save the token
-      navigate("/"); // Redirect to home
+      login(); // Update context
+      navigate("/account"); // Redirect to Account page
     } catch (error: any) {
-      alert(error.response?.data?.error || "Вход не выполнен!");
+      // Set error under the password field
+      if (error.response?.status === 401) {
+        setError("password", { type: "manual", message: "Неправильный пароль или email." });
+      } else {
+        setError("password", { type: "manual", message: "Произошла ошибка. Попробуйте снова." });
+      }
     }
   };
 
