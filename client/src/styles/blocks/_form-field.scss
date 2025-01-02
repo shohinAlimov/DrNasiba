@@ -1,0 +1,16 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  &__label {
+    font-size: 18px;
+    font-weight: 28px;
+  }
+
+  & input {
+    outline: none;
+    border: 2px solid $color-cabaret;
+    border-radius: 8px;
+    padding: 10px;
+  }
+}

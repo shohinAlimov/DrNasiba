@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  &__error {
+    font-weight: 600;
+    color: $color-cabaret;
+  }
+}
