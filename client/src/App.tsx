@@ -5,6 +5,7 @@ import Account from "./pages/Account/Account";
 import { Header } from "./ui/Header";
 import Appointments from "./pages/Appointments";
 import About from "./pages/About";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/about" element={<About />} />
-        <Route path="/" element={<h1>Welcome to the Home Page</h1>} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </>
   );

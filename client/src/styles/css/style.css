@@ -501,7 +501,7 @@ textarea {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform ease-in 0.3s;
+  transition: box-shadow ease-in 0.3s;
 }
 .btn--primary {
   background-color: #D95B6D;
@@ -510,7 +510,7 @@ textarea {
   border-radius: 8px;
 }
 .btn--primary:hover {
-  transform: translateY(-2px);
+  box-shadow: 0 0 10px 0 rgb(217, 91, 109);
 }
 
 .form-field {
@@ -520,6 +520,10 @@ textarea {
 .form-field__label {
   font-size: 18px;
   font-weight: 28px;
+  margin: 0 0 5px 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .form-field input {
   outline: none;
@@ -640,8 +644,14 @@ textarea {
   gap: 15px;
 }
 .form__error {
-  font-weight: 600;
-  color: #D95B6D;
+  color: #f44336;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+.form__description {
+  color: #888;
+  font-size: 0.8rem;
+  margin-top: 5px;
 }
 
 .logo-preview {
@@ -649,6 +659,70 @@ textarea {
   height: 100px;
   -o-object-fit: cover;
      object-fit: cover;
-  margin-top: 10px;
   border-radius: 50%;
+}
+
+.notification {
+  position: fixed;
+  bottom: 0%;
+  right: 50%;
+  transform: translateX(50%);
+  width: 100%;
+  padding: 1rem;
+  border-radius: 5px;
+  color: #fff;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+.notification--success {
+  background-color: #4caf50;
+}
+.notification--error {
+  background-color: #f44336;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.account__top-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file-input {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  transition: box-shadow ease-in 0.3s;
+}
+.file-input:hover {
+  box-shadow: 0 0 10px 0 rgb(217, 91, 109);
+}
+.file-input__input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.file-input__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background-color: #D95B6D;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+.file-input__icon {
+  font-size: 16px;
 }/*# sourceMappingURL=style.css.map */

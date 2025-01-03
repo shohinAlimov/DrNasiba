@@ -17,11 +17,13 @@ export const saveAccountDetails = (data: any) => {
 
 // Get account details
 export const getAccountDetails = () => {
-  const token = localStorage.getItem("authToken");
   return api.get("/api/account", {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Pass the token
+    },
   });
 };
+
 
 
 export default api;

@@ -11,13 +11,34 @@ export const Header = () => {
           <nav className="navigation">
             <ul className="navigation__list">
               <li className="navigation__item">
-                <NavLink to="/" className="navigation__link">Home</NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                  }
+                >
+                  Главная
+                </NavLink>
               </li>
               <li className="navigation__item">
-                <NavLink to="/appointments" className="navigation__link">Appointments</NavLink>
+                <NavLink
+                  to="/appointments"
+                  className={({ isActive }) =>
+                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                  }
+                >
+                  Консультация
+                </NavLink>
               </li>
               <li className="navigation__item">
-                <NavLink to="/about" className="navigation__link">About</NavLink>
+                <NavLink
+                  to="/about"
+                  className={({ isActive }) =>
+                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                  }
+                >
+                  Мой опыт
+                </NavLink>
               </li>
             </ul>
           </nav>
@@ -25,18 +46,40 @@ export const Header = () => {
             {isLoggedIn ? (
               <>
                 {user?.logo && (
-                  <NavLink to="/account">
+                  <NavLink
+                    to="/account"
+                    className={({ isActive }) =>
+                      isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                    }
+                  >
                     <img src={user.logo} alt="User Logo" className="header__account-logo" />
                   </NavLink>
                 )}
-                <NavLink to="/account" className="navigation__link">
-                  {user?.name || "Account"}
+                <NavLink to="/account"
+                  className={({ isActive }) =>
+                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                  }
+                >
+                  {user?.name || "Мой аккаунт"}
                 </NavLink>
               </>
             ) : (
               <>
-                <NavLink to="/login" className="navigation__link">Login</NavLink>
-                <NavLink to="/register" className="navigation__link">Register</NavLink>
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) =>
+                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                  }
+                >Login</NavLink>
+                <span className="header__divider"> / </span>
+                <NavLink
+                  to="/register"
+                  className={({ isActive }) =>
+                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                  }
+                >
+                  Register
+                </NavLink>
               </>
             )}
           </div>

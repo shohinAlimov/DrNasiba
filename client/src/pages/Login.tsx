@@ -12,7 +12,12 @@ interface LoginFormInputs {
 }
 
 const Login: React.FC = () => {
-  const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginFormInputs>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<LoginFormInputs>();
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -22,16 +27,27 @@ const Login: React.FC = () => {
         email: data.email,
         password: data.password,
       });
+
       const token = response.data.token;
-      localStorage.setItem("authToken", token); // Save the token
-      login(); // Update context
-      navigate("/account"); // Redirect to Account page
+      const user = response.data.user; // Assuming the server returns user details
+
+      // Save token and user details to context
+      localStorage.setItem("authToken", token);
+      login(user); // Pass user details to update context
+      navigate("/account"); // Redirect to the Account page
     } catch (error: any) {
-      // Set error under the password field
       if (error.response?.status === 401) {
-        setError("password", { type: "manual", message: "Неправильный пароль или email." });
+        // Set error for invalid credentials
+        setError("password", {
+          type: "manual",
+          message: "Неправильный пароль или email.",
+        });
       } else {
-        setError("password", { type: "manual", message: "Произошла ошибка. Попробуйте снова." });
+        // Set error for other issues
+        setError("password", {
+          type: "manual",
+          message: "Произошла ошибка. Попробуйте снова.",
+        });
       }
     }
   };
@@ -53,7 +69,9 @@ const Login: React.FC = () => {
                   },
                 })}
               />
-              {errors.email && <span className="form__error">{errors.email.message}</span>}
+              {errors.email && (
+                <span className="form__error">{errors.email.message}</span>
+              )}
             </FormField>
             <FormField label="Пароль">
               <input
@@ -62,7 +80,9 @@ const Login: React.FC = () => {
                   required: "Введите ваш пароль",
                 })}
               />
-              {errors.password && <span className="form__error">{errors.password.message}</span>}
+              {errors.password && (
+                <span className="form__error">{errors.password.message}</span>
+              )}
             </FormField>
             <Button type="submit" title="Войти" variant="primary" />
           </form>

@@ -9,17 +9,16 @@
   justify-content: center;
   cursor: pointer;
 
-  transition: transform $transition-300;
+  transition: box-shadow $transition-300; // Add box-shadow animation transition
 
   &--primary {
-    background-color: $color-cabaret;
-    color: $color-white;
+    background-color: #D95B6D; // Primary color
+    color: #ffffff; // White text color
     padding: 10px;
     border-radius: 8px;
 
     &:hover {
-      transform: translateY(-2px);
+      box-shadow: 0 0 10px 0 rgba(217, 91, 109, 1); // Animate the box-shadow on hover
     }
   }
-
 }

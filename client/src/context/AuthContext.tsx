@@ -40,16 +40,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [isLoggedIn]);
 
-  const login = (userData: User) => {
+  const login = (userData: Partial<User>) => {
     setIsLoggedIn(true);
-    setUser(userData);
+    setUser((prev) => ({ ...prev, ...userData } as User));
   };
+
 
   const logout = () => {
     localStorage.removeItem("authToken"); // Remove token
     setIsLoggedIn(false); // Update logged-in state
     setUser(null); // Clear user data
-
   };
 
   const updateUser = (userData: Partial<User>) => {

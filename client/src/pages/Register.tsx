@@ -13,10 +13,16 @@ interface RegisterFormInputs {
 }
 
 const Register: React.FC = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormInputs>();
+  const {
+    register,
+    handleSubmit,
+    setError, // Include setError here
+    watch,
+    formState: { errors },
+  } = useForm<RegisterFormInputs>();
   const navigate = useNavigate();
+  const { login } = useAuth();
   const password = watch("password");
-  const { login } = useAuth(); // Move useAuth call here
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     try {
@@ -24,14 +30,27 @@ const Register: React.FC = () => {
         email: data.email,
         password: data.password,
       });
-      const token = response.data.token; // Assuming the server sends back a token
+      const token = response.data.token;
+      const user = { name: "Account", logo: null }; // Default user details
       localStorage.setItem("authToken", token); // Save the token
-      login(); // Update context
-      navigate("/account"); // Redirect to account page
+      login(user); // Update AuthContext with default user data
+      navigate("/account"); // Redirect to Account page
     } catch (error: any) {
-      alert(error.response?.data?.error || "Ошибка при регистрации!");
+      if (error.response?.status === 409) {
+        setError("email", {
+          type: "manual",
+          message: "Этот email уже зарегистрирован.",
+        });
+      } else {
+        setError("email", {
+          type: "manual",
+          message: "Произошла ошибка. Попробуйте снова.",
+        });
+      }
     }
   };
+
+
 
   return (
     <section className="register">
@@ -49,7 +68,9 @@ const Register: React.FC = () => {
                   },
                 })}
               />
-              {errors.email && <span className="form__error">{errors.email.message}</span>}
+              {errors.email && (
+                <span className="form__error">{errors.email.message}</span>
+              )}
             </FormField>
             <FormField label="Пароль">
               <input
@@ -62,17 +83,24 @@ const Register: React.FC = () => {
                   },
                 })}
               />
-              {errors.password && <span className="form__error">{errors.password.message}</span>}
+              {errors.password && (
+                <span className="form__error">{errors.password.message}</span>
+              )}
             </FormField>
             <FormField label="Подтвердите пароль">
               <input
                 type="password"
                 {...register("confirmPassword", {
                   required: "Подтвердите ваш пароль",
-                  validate: (value) => value === password || "Пароли не совпадают",
+                  validate: (value) =>
+                    value === password || "Пароли не совпадают",
                 })}
               />
-              {errors.confirmPassword && <span className="form__error">{errors.confirmPassword.message}</span>}
+              {errors.confirmPassword && (
+                <span className="form__error">
+                  {errors.confirmPassword.message}
+                </span>
+              )}
             </FormField>
             <Button type="submit" title="Регистрация" variant="primary" />
           </form>

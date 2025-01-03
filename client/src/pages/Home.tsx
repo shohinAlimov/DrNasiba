@@ -1,7 +1,10 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Home: React.FC = () => {
-  return <div>Home Page</div>;
+  const { user } = useAuth();
+
+  return <div>Hello {user?.name || "Guest"}!</div>;
 };
 
 export default Home;

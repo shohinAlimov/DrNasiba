@@ -66,17 +66,18 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Authentication middleware
 const authenticateToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization?.split(" ")[1]; // Extract the token
+
   if (!token) {
     return res.status(401).json({ error: "Access denied. No token provided." });
   }
 
   try {
-    const decoded = jwt.verify(token, "secret_key"); // Replace "secret_key" with your actual secret key
-    req.user = decoded; // Attach the user data (e.g., ID) to the request
-    next(); // Call the next middleware or route handler
+    const decoded = jwt.verify(token, "secret_key"); // Replace "secret_key" with your secret
+    req.user = decoded; // Attach user data to the request
+    next();
   } catch (err) {
-    res.status(401).json({ error: "Invalid token." });
+    return res.status(401).json({ error: "Invalid token." }); // Handle invalid tokens
   }
 };
 
@@ -143,12 +144,20 @@ app.post("/api/register", async (req, res) => {
     const newUser = { email, password: hashedPassword };
     const db = client.db("appointments");
     const result = await db.collection("users").insertOne(newUser);
-    res.status(201).json({ message: "User registered successfully", userId: result.insertedId });
+
+    // Generate a token
+    const token = jwt.sign({ id: result.insertedId }, "secret_key", {
+      expiresIn: "1h",
+    });
+
+    res.status(201).json({ message: "User registered successfully", token });
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).json({ error: "Failed to register user" });
   }
 });
+
+
 
 // Login endpoint
 app.post("/api/login", async (req, res) => {
