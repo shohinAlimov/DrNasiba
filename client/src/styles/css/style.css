@@ -423,6 +423,7 @@ textarea {
   display: flex;
   justify-content: space-between;
   padding: 20px 0;
+  align-items: center;
 }
 .header__inner {
   display: flex;
@@ -434,6 +435,12 @@ textarea {
 }
 .header__link--active {
   font-weight: 700;
+  color: #ffffff;
+}
+.header__account-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .navigation__list {
@@ -447,6 +454,9 @@ textarea {
 }
 .navigation__link {
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .navigation__link--active {
   color: #ffffff;
@@ -632,4 +642,13 @@ textarea {
 .form__error {
   font-weight: 600;
   color: #D95B6D;
+}
+
+.logo-preview {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-top: 10px;
+  border-radius: 50%;
 }/*# sourceMappingURL=style.css.map */

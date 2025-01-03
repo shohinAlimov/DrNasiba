@@ -1,8 +1,8 @@
-import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
 
 export const Header = () => {
-  const { isLoggedIn } = useAuth();
+  const { user, isLoggedIn } = useAuth(); // Use isLoggedIn to manage state
 
   return (
     <header className="header">
@@ -11,54 +11,32 @@ export const Header = () => {
           <nav className="navigation">
             <ul className="navigation__list">
               <li className="navigation__item">
-                <NavLink
-                  to="/"
-                  className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
-                >
-                  Домой
-                </NavLink>
+                <NavLink to="/" className="navigation__link">Home</NavLink>
               </li>
               <li className="navigation__item">
-                <NavLink
-                  to="/Appointments"
-                  className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
-                >
-                  Запись
-                </NavLink>
+                <NavLink to="/appointments" className="navigation__link">Appointments</NavLink>
               </li>
               <li className="navigation__item">
-                <NavLink
-                  to="/About"
-                  className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
-                >
-                  О нас
-                </NavLink>
+                <NavLink to="/about" className="navigation__link">About</NavLink>
               </li>
             </ul>
           </nav>
           <div className="header__inner">
             {isLoggedIn ? (
-              <NavLink
-                to="/Account"
-                className={({ isActive }) => (isActive ? "navigation__link--active" : "navigation__link")}
-              >
-                Аккаунт
-              </NavLink>
+              <>
+                {user?.logo && (
+                  <NavLink to="/account">
+                    <img src={user.logo} alt="User Logo" className="header__account-logo" />
+                  </NavLink>
+                )}
+                <NavLink to="/account" className="navigation__link">
+                  {user?.name || "Account"}
+                </NavLink>
+              </>
             ) : (
               <>
-                <NavLink
-                  to="/Login"
-                  className={({ isActive }) => (isActive ? "header__link--active" : "header__link")}
-                >
-                  Логин
-                </NavLink>
-                <span className="header__divider">/</span>
-                <NavLink
-                  to="/Register"
-                  className={({ isActive }) => (isActive ? "header__link--active" : "header__link")}
-                >
-                  Регистрация
-                </NavLink>
+                <NavLink to="/login" className="navigation__link">Login</NavLink>
+                <NavLink to="/register" className="navigation__link">Register</NavLink>
               </>
             )}
           </div>

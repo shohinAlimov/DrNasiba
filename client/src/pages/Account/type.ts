@@ -3,5 +3,5 @@ export interface AccountDetails {
   surname: string;
   phone: string;
   email: string;
-  logo: File | null;
+  logo: File | null; // Allow both File and null
 }

@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormField } from "../../ui/FormField";
 import { Button } from "../../ui/Button";
 import { AccountDetails } from "./type";
-import { useAuth } from "../../context/AuthContext"; // Import useAuth
+import { useAuth } from "../../context/AuthContext";
+import api, { getAccountDetails } from "../../../../backend/services/api";
 
 const Account: React.FC = () => {
-  const navigate = useNavigate();
-  const { logout } = useAuth(); // Get the logout function from AuthContext
+  const navigate = useNavigate(); // For navigation after logout
+  const { logout, updateUser } = useAuth();
+  const [preview, setPreview] = useState<string | null>(null);
+
   const [formData, setFormData] = useState<AccountDetails>({
     name: "",
     surname: "",
@@ -16,6 +19,28 @@ const Account: React.FC = () => {
     logo: null,
   });
 
+  useEffect(() => {
+    getAccountDetails()
+      .then((response) => {
+        if (response.data) {
+          setFormData({
+            name: response.data.name || "",
+            surname: response.data.surname || "",
+            phone: response.data.phone || "",
+            email: response.data.email || "",
+            logo: null,
+          });
+
+          if (response.data.logo) {
+            setPreview(response.data.logo);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching account details:", error);
+      });
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -23,18 +48,45 @@ const Account: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFormData({ ...formData, logo: e.target.files[0] });
-    }
-  };
+      const file = e.target.files[0];
+      setFormData({ ...formData, logo: file });
 
-  const handleLogout = () => {
-    logout(); // Call the AuthContext's logout function
-    navigate("/login"); // Redirect to the login page
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitted Data:", formData);
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("surname", formData.surname);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("email", formData.email);
+    if (formData.logo) {
+      formDataToSend.append("logo", formData.logo);
+    }
+
+    api.post("/api/account", formDataToSend, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    })
+      .then((response) => {
+        alert("Account details saved successfully!");
+        updateUser({ name: response.data.name, logo: response.data.logo });
+      })
+      .catch((error) => {
+        console.error("Error saving account details:", error);
+        alert("Failed to save account details.");
+      });
+  };
+
+  const handleLogout = () => {
+    logout(); // Clear user session and context
+    navigate("/login"); // Redirect to the login page
   };
 
   return (
@@ -80,6 +132,7 @@ const Account: React.FC = () => {
           </FormField>
           <FormField label="Логотип">
             <input type="file" name="logo" onChange={handleFileChange} />
+            {preview && <img src={preview} alt="Logo Preview" className="logo-preview" />}
           </FormField>
           <Button type="submit" title="Сохранить" variant="primary" />
         </form>
