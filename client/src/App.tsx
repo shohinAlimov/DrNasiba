@@ -1,23 +1,25 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Header } from "./components/Header";
-import Appointments from "./pages/Appointments";
-import Register from "./pages/Register";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import Home from "./pages/Home";
+import Register from "./pages/Register";
+import Account from "./pages/Account/Account";
+import { Header } from "./ui/Header";
+import Appointments from "./pages/Appointments";
 import About from "./pages/About";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <Router>
+    <>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/about" element={<About />} />
+        <Route path="/" element={<Home />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

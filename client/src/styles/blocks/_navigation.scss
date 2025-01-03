@@ -13,8 +13,12 @@
 
   &__link {
     color: $color-white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
     &--active {
+      color: $color-white;
       font-weight: 700;
     }
   }

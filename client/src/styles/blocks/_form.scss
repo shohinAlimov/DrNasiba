@@ -4,7 +4,14 @@
   gap: 15px;
 
   &__error {
-    font-weight: 600;
-    color: $color-cabaret;
+    color: #f44336; // Red for errors
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+
+  &__description {
+    color: #888; // Light gray for descriptions
+    font-size: 0.8rem;
+    margin-top: 5px;
   }
 }
