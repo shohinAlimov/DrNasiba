@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../../backend/services/api";
 import { FormField } from "../ui/FormField";
 import { Button } from "../ui/Button";
@@ -104,6 +104,7 @@ const Register: React.FC = () => {
             </FormField>
             <Button type="submit" title="Регистрация" variant="primary" />
           </form>
+          <span className="register__redirect-log">Уже есть аккаунт? <NavLink className="register__redirect-link" to="/login">Войти</NavLink></span>
         </div>
       </div>
     </section>

@@ -10,4 +10,16 @@
   &__wrapper {
     max-width: 500px;
   }
+
+  &__redirect {
+    &-reg {
+      display: block;
+      margin: 10px 0 0 0;
+    }
+
+    &-link {
+      font-weight: 700;
+      color: $color-cabaret;
+    }
+  }
 }

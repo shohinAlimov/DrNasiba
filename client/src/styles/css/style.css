@@ -625,6 +625,14 @@ textarea {
 .register__wrapper {
   max-width: 500px;
 }
+.register__redirect-log {
+  display: block;
+  margin: 10px 0 0 0;
+}
+.register__redirect-link {
+  font-weight: 700;
+  color: #D95B6D;
+}
 
 .login {
   margin: 50px 0 0 0;
@@ -637,6 +645,14 @@ textarea {
 .login__wrapper {
   max-width: 500px;
 }
+.login__redirect-reg {
+  display: block;
+  margin: 10px 0 0 0;
+}
+.login__redirect-link {
+  font-weight: 700;
+  color: #D95B6D;
+}
 
 .form {
   display: flex;
@@ -647,6 +663,7 @@ textarea {
   color: #f44336;
   font-size: 0.9rem;
   margin-top: 5px;
+  font-weight: 600;
 }
 .form__description {
   color: #888;
