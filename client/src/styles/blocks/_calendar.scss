@@ -1,64 +1,156 @@
+.calendar-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  background-color: #E75A7C;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  color: #FFFFFF;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
 .calendar {
-  width: 100%;
-  max-width: 28rem;
+  $self: &;
+  width: 300px;
 
   &__header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 1rem;
   }
 
-  &__title {
-    font-size: 1.25rem;
-    font-weight: 600;
+  &__month {
+    font-size: 1rem;
+    font-weight: 500;
   }
 
-  &__nav-btn {
-    padding: 0.5rem;
+  &__nav {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #FFFFFF;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 
-  &__grid {
+  &__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__weekday {
+    text-align: center;
+    font-size: 0.75rem;
+  }
+
+  &__days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.25rem;
   }
 
-  &__weekday {
-    text-align: center;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 0;
-  }
-
   &__day {
-    height: 3rem;
-    width: 100%;
-    text-align: center;
-    border: none;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: transparent;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    transition: all 0.2s;
 
-    &--empty {
-      background: transparent;
-    }
-
-    &--available {
-      background-color: #f8f6f1;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #e5e5e5;
-      }
+    &:hover:not(&--disabled) {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     &--selected {
-      background-color: $color-cabaret;
-      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #FFFFFF;
     }
 
     &--disabled {
-      background-color: #e5e5e5;
-      color: #9ca3af;
+      opacity: 0.5;
       cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+}
+
+.appointment-section {
+  $self: &;
+
+  &__date {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__slots {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__time-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0.25rem;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+
+    &:hover:not(&--disabled) {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    &--selected {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: #FFFFFF;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__status {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  &__submit {
+    width: 100%;
+    padding: 1rem;
+    background: #FFFFFF;
+    color: #E75A7C;
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
     }
   }
 }

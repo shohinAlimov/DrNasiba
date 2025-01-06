@@ -5,7 +5,7 @@ import Account from "./pages/Account/Account";
 import { Header } from "./ui/Header";
 import About from "./pages/About";
 import Home from "./pages/Home";
-import Appointments from "./pages/Appointments";
+import Appointments from "./pages/Appointments/Appointments";
 
 function App() {
   return (

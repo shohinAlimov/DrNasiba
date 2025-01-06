@@ -539,24 +539,34 @@ textarea {
 }
 
 .consultation {
-  display: flex;
-  align-items: center;
-}
-.consultation__main {
-  padding: 45px;
-  background-color: #D95B6D;
-  color: #ffffff;
+  margin: 50px 0 0 0;
 }
 .consultation__title {
-  margin: 0;
+  margin: 0 0 10px 0;
   font-size: 36px;
-  line-height: 34px;
+  line-height: 44px;
+}
+.consultation__form {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-between;
+}
+.consultation__form-wrapper {
+  max-width: 600px;
+}
+.consultation__submit {
+  margin: 24px 0 0 0;
+  width: 100%;
+  background-color: #D95B6D;
+}
+.consultation__error {
+  font-size: 16px;
+  font-weight: 600;
+  color: red;
 }
 
-.calendar {
-  width: 300px;
-}
-.calendar__container {
+.calendar-container {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 2rem;
@@ -566,6 +576,10 @@ textarea {
   color: #FFFFFF;
   max-width: 1024px;
   margin: 0 auto;
+}
+
+.calendar {
+  width: 300px;
 }
 .calendar__header {
   display: flex;
