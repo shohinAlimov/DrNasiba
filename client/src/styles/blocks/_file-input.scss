@@ -2,6 +2,7 @@
   position: relative;
   display: inline-block;
   width: 100%;
+  border-radius: 8px;
 
   transition: box-shadow $transition-300; // Add box-shadow animation transition
 
@@ -15,8 +16,6 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
-
-
   }
 
   &__label {

@@ -34,8 +34,12 @@ const Account: React.FC = () => {
       email: "",
     };
 
-    if (!formData.name || formData.name.length <= 5) {
+    if (!formData.name) {
       newErrors.name = "Заполните данное поле";
+    }
+
+    if (formData.name.length <= 3) {
+      newErrors.name = "Короткое имя!"
     }
 
     if (!formData.phone || !/^(\+992)[0-9]{9}$/.test(formData.phone)) {
@@ -161,86 +165,88 @@ const Account: React.FC = () => {
 
 
   return (
-    <section className="account">
-      {notification && (
-        <ToastNotification
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
-      <div className="container">
-        <div className="account__top-wrapper">
-          <h2 className="account__title">Мой аккаунт</h2>
-          <Button className="" type="button" title="Выйти" variant="primary" onClick={handleLogout} />
-        </div>
-        <form className="form" onSubmit={handleSubmit} noValidate>
-          <FormField label="Имя">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            />
-            {errors.name && <span className="form__error">{errors.name}</span>}
-          </FormField>
-
-
-          <FormField label="Фамилия">
-            <input
-              type="text"
-              name="surname"
-              value={formData.surname}
-              onChange={(e) => setFormData({ ...formData, surname: e.target.value })}
-            />
-            {formData.surname && formData.surname.length <= 5 && (
-              <span className="form__error">Фамилия должна быть больше 5 символов.</span>
-            )}
-          </FormField>
-
-          <FormField label="Телефон">
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            />
-            {errors.phone && <span className="form__error">{errors.phone}</span>}
-          </FormField>
-
-
-          <FormField label="Email">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
-            {errors.email && <span className="form__error">{errors.email}</span>}
-          </FormField>
-
-
-          <FormField label="Логотип">
-            <div className="file-input">
+    <>
+      <section className="account">
+        {notification && (
+          <ToastNotification
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
+        <div className="container">
+          <div className="account__top-wrapper">
+            <h2 className="account__title">Мой аккаунт</h2>
+            <Button className="" type="button" title="Выйти" variant="primary" onClick={handleLogout} />
+          </div>
+          <form className="form" onSubmit={handleSubmit} noValidate>
+            <FormField label="Имя">
               <input
-                type="file"
-                name="logo"
-                id="file-upload"
-                onChange={handleFileChange}
-                className="file-input__input"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
-              <label htmlFor="file-upload" className="file-input__label">
-                <span className="file-input__icon">📁</span>
-                <span className="file-input__text">Choose File</span>
-              </label>
-            </div>
-            {preview && <img src={preview} alt="Logo Preview" className="logo-preview" />}
-          </FormField>
+              {errors.name && <span className="form__error">{errors.name}</span>}
+            </FormField>
 
-          <Button type="submit" title="Сохранить" variant="primary" />
-        </form>
-      </div>
-    </section>
+
+            <FormField label="Фамилия">
+              <input
+                type="text"
+                name="surname"
+                value={formData.surname}
+                onChange={(e) => setFormData({ ...formData, surname: e.target.value })}
+              />
+              {formData.surname && formData.surname.length <= 5 && (
+                <span className="form__error">Фамилия должна быть больше 5 символов.</span>
+              )}
+            </FormField>
+
+            <FormField label="Телефон">
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+              {errors.phone && <span className="form__error">{errors.phone}</span>}
+            </FormField>
+
+
+            <FormField label="Email">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+              {errors.email && <span className="form__error">{errors.email}</span>}
+            </FormField>
+
+
+            <FormField label="Логотип">
+              <div className="file-input">
+                <input
+                  type="file"
+                  name="logo"
+                  id="file-upload"
+                  onChange={handleFileChange}
+                  className="file-input__input"
+                />
+                <label htmlFor="file-upload" className="file-input__label">
+                  <span className="file-input__icon">📁</span>
+                  <span className="file-input__text">Choose File</span>
+                </label>
+              </div>
+              {preview && <img src={preview} alt="Logo Preview" className="logo-preview" />}
+            </FormField>
+
+            <Button type="submit" title="Сохранить" variant="primary" />
+          </form>
+        </div>
+      </section>
+    </>
   );
 };
 

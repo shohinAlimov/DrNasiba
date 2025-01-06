@@ -372,6 +372,7 @@ body {
 
 main {
   flex-grow: 1;
+  margin: 50px 0 100px;
 }
 
 img {
@@ -531,87 +532,157 @@ textarea {
   border-radius: 8px;
   padding: 10px;
 }
+.form-field--secondary input {
+  border: 2px solid #ffffff;
+  background-color: transparent;
+  color: #ffffff;
+}
 
 .consultation {
-  margin: 50px 0 0 0;
+  display: flex;
+  align-items: center;
+}
+.consultation__main {
+  padding: 45px;
+  background-color: #D95B6D;
+  color: #ffffff;
 }
 .consultation__title {
-  margin: 0 0 10px 0;
+  margin: 0;
   font-size: 36px;
-  line-height: 44px;
-}
-.consultation__form {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: space-between;
-}
-.consultation__form-wrapper {
-  max-width: 600px;
-}
-.consultation__submit {
-  margin: 24px 0 0 0;
-  width: 100%;
-  background-color: #D95B6D;
-}
-.consultation__error {
-  font-size: 16px;
-  font-weight: 600;
-  color: red;
+  line-height: 34px;
 }
 
 .calendar {
-  width: 100%;
-  max-width: 28rem;
+  width: 300px;
+}
+.calendar__container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  background-color: #E75A7C;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  color: #FFFFFF;
+  max-width: 1024px;
+  margin: 0 auto;
 }
 .calendar__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
-.calendar__title {
-  font-size: 1.25rem;
-  font-weight: 600;
+.calendar__month {
+  font-size: 1rem;
+  font-weight: 500;
 }
-.calendar__nav-btn {
-  padding: 0.5rem;
+.calendar__nav {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.calendar__grid {
+.calendar__nav:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+.calendar__weekday {
+  text-align: center;
+  font-size: 0.75rem;
+}
+.calendar__days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.25rem;
 }
-.calendar__weekday {
-  text-align: center;
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0.5rem 0;
-}
 .calendar__day {
-  height: 3rem;
-  width: 100%;
-  text-align: center;
-  border: none;
-}
-.calendar__day--empty {
-  background: transparent;
-}
-.calendar__day--available {
-  background-color: #f8f6f1;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  background: transparent;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  transition: all 0.2s;
 }
-.calendar__day--available:hover {
-  background-color: #e5e5e5;
+.calendar__day:hover:not(.calendar__day--disabled) {
+  background: rgba(255, 255, 255, 0.1);
 }
 .calendar__day--selected {
-  background-color: #D95B6D;
-  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #FFFFFF;
 }
 .calendar__day--disabled {
-  background-color: #e5e5e5;
-  color: #9ca3af;
+  opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
+}
+
+.appointment-section__date {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.appointment-section__slots {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.appointment-section__time-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.25rem;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+.appointment-section__time-btn:hover:not(.appointment-section__time-btn--disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+.appointment-section__time-btn--selected {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #FFFFFF;
+}
+.appointment-section__time-btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.appointment-section__status {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+.appointment-section__submit {
+  width: 100%;
+  padding: 1rem;
+  background: #FFFFFF;
+  color: #E75A7C;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.appointment-section__submit:hover {
+  opacity: 0.9;
 }
 
 .register {
@@ -711,11 +782,15 @@ textarea {
   justify-content: space-between;
   align-items: center;
 }
+.account__title {
+  margin: 0;
+}
 
 .file-input {
   position: relative;
   display: inline-block;
   width: 100%;
+  border-radius: 8px;
   transition: box-shadow ease-in 0.3s;
 }
 .file-input:hover {
