@@ -1,18 +1,18 @@
-.calendar-container {
+.calendar {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 2rem;
-  background-color: #E75A7C;
+  background-color: $color-cabaret;
   padding: 2rem;
   border-radius: 0.5rem;
-  color: #FFFFFF;
+  color: $color-white;
   max-width: 1024px;
   margin: 0 auto;
-}
 
-.calendar {
-  $self: &;
-  width: 300px;
+  &__container {
+    $self: &;
+    width: 300px;
+  }
 
   &__header {
     display: flex;
@@ -29,7 +29,7 @@
   &__nav {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #FFFFFF;
+    color: $color-white;
     width: 2rem;
     height: 2rem;
     border-radius: 0.25rem;
@@ -70,7 +70,7 @@
     justify-content: center;
     cursor: pointer;
     background: transparent;
-    color: #FFFFFF;
+    color: $color-white;
     font-size: 0.875rem;
     transition: all 0.2s;
 
@@ -80,7 +80,7 @@
 
     &--selected {
       background: rgba(255, 255, 255, 0.2);
-      border-color: #FFFFFF;
+      border-color: $color-white;
     }
 
     &--disabled {
@@ -111,7 +111,7 @@
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 0.25rem;
-    color: #FFFFFF;
+    color: $color-white;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -124,7 +124,7 @@
 
     &--selected {
       background: rgba(255, 255, 255, 0.3);
-      border-color: #FFFFFF;
+      border-color: $color-white;
     }
 
     &--disabled {
@@ -141,8 +141,8 @@
   &__submit {
     width: 100%;
     padding: 1rem;
-    background: #FFFFFF;
-    color: #E75A7C;
+    background: $color-white;
+    color: $color-cabaret;
     border: none;
     border-radius: 0.25rem;
     font-weight: 500;

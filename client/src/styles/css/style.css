@@ -566,19 +566,18 @@ textarea {
   color: red;
 }
 
-.calendar-container {
+.calendar {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 2rem;
-  background-color: #E75A7C;
+  background-color: #D95B6D;
   padding: 2rem;
   border-radius: 0.5rem;
-  color: #FFFFFF;
+  color: #ffffff;
   max-width: 1024px;
   margin: 0 auto;
 }
-
-.calendar {
+.calendar__container {
   width: 300px;
 }
 .calendar__header {
@@ -594,7 +593,7 @@ textarea {
 .calendar__nav {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #FFFFFF;
+  color: #ffffff;
   width: 2rem;
   height: 2rem;
   border-radius: 0.25rem;
@@ -630,7 +629,7 @@ textarea {
   justify-content: center;
   cursor: pointer;
   background: transparent;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.875rem;
   transition: all 0.2s;
 }
@@ -639,7 +638,7 @@ textarea {
 }
 .calendar__day--selected {
   background: rgba(255, 255, 255, 0.2);
-  border-color: #FFFFFF;
+  border-color: #ffffff;
 }
 .calendar__day--disabled {
   opacity: 0.5;
@@ -662,7 +661,7 @@ textarea {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0.25rem;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -674,7 +673,7 @@ textarea {
 }
 .appointment-section__time-btn--selected {
   background: rgba(255, 255, 255, 0.3);
-  border-color: #FFFFFF;
+  border-color: #ffffff;
 }
 .appointment-section__time-btn--disabled {
   opacity: 0.5;
@@ -687,8 +686,8 @@ textarea {
 .appointment-section__submit {
   width: 100%;
   padding: 1rem;
-  background: #FFFFFF;
-  color: #E75A7C;
+  background: #ffffff;
+  color: #D95B6D;
   border: none;
   border-radius: 0.25rem;
   font-weight: 500;

@@ -8,7 +8,7 @@ const getDushanbeDate = (): Date => {
   return dushanbeDate;
 };
 
-const Calendar: React.FC = () => {
+const Appointments: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(getDushanbeDate());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -106,8 +106,8 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="calendar-container">
-      <div className="calendar">
+    <div className="calendar">
+      <div className="calendar__container">
         <div className="calendar__header">
           <button className="calendar__nav" onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1))}>&lt;</button>
           <h3 className="calendar__month">
@@ -162,4 +162,4 @@ const Calendar: React.FC = () => {
   );
 };
 
-export default Calendar;
+export default Appointments;
