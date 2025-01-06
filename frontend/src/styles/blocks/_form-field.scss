@@ -1,0 +1,31 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  &__label {
+    font-size: 18px;
+    font-weight: 28px;
+    margin: 0 0 5px 0;
+    user-select: none;
+  }
+
+  & input {
+    outline: none;
+    border: 2px solid $color-cabaret;
+    border-radius: 8px;
+    padding: 10px;
+
+
+  }
+
+  &--secondary {
+
+    & input {
+      border: 2px solid $color-white;
+      background-color: transparent;
+      color: $color-white;
+    }
+  }
+
+
+}

@@ -1,0 +1,24 @@
+.btn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  transition: box-shadow $transition-300; // Add box-shadow animation transition
+
+  &--primary {
+    background-color: #D95B6D; // Primary color
+    color: #ffffff; // White text color
+    padding: 10px;
+    border-radius: 8px;
+
+    &:hover {
+      box-shadow: 0 0 10px 0 rgba(217, 91, 109, 1); // Animate the box-shadow on hover
+    }
+  }
+}

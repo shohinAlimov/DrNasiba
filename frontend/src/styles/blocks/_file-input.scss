@@ -1,0 +1,38 @@
+.file-input {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  border-radius: 8px;
+
+  transition: box-shadow $transition-300; // Add box-shadow animation transition
+
+  &:hover {
+    box-shadow: 0 0 10px 0 rgba(217, 91, 109, 1); // Animate the box-shadow on hover
+  }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background-color: $color-cabaret;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+
+  }
+
+  &__icon {
+    font-size: 16px;
+  }
+}

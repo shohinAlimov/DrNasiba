@@ -1,0 +1,25 @@
+.login {
+  margin: 50px 0 0 0;
+
+  &__title {
+    font-size: 36px;
+    line-height: 44px;
+    margin: 0 0 10px 0;
+  }
+
+  &__wrapper {
+    max-width: 500px;
+  }
+
+  &__redirect {
+    &-reg {
+      display: block;
+      margin: 10px 0 0 0;
+    }
+
+    &-link {
+      font-weight: 700;
+      color: $color-cabaret;
+    }
+  }
+}
