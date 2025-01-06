@@ -9,16 +9,28 @@
   justify-content: center;
   cursor: pointer;
 
-  transition: box-shadow $transition-300; // Add box-shadow animation transition
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 4px;
 
   &--primary {
-    background-color: #D95B6D; // Primary color
-    color: #ffffff; // White text color
+    background-color: $color-cabaret;
+    color: $color-white;
     padding: 10px;
-    border-radius: 8px;
+    transition: background-color 0.3s ease;
+
 
     &:hover {
-      box-shadow: 0 0 10px 0 rgba(217, 91, 109, 1); // Animate the box-shadow on hover
+      background-color: #D2596A;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
     }
   }
 }

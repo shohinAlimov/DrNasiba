@@ -1,41 +1,82 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import axios from 'axios';
 
-// Define the type for AuthContext
-type AuthContextType = {
+interface AuthContextType {
   token: string | null;
-  setToken: (token: string | null) => void;
+  user: any;
+  isLoggedIn: boolean;
+  login: (token: string) => void;
   logout: () => void;
-};
+}
 
-// Create the AuthContext
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [token, setTokenState] = useState<string | null>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setTokenState] = useState<string | null>(localStorage.getItem('authToken'));
+  const [user, setUser] = useState<any>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!token);
 
-  // Load the token from sessionStorage on initialization
-  useEffect(() => {
-    const storedToken = sessionStorage.getItem('authToken');
-    if (storedToken) {
-      setTokenState(storedToken);
-    }
-  }, []);
+  const setToken = (newToken: string | null) => {
+    setTokenState(newToken);
 
-  const setToken = (token: string | null) => {
-    if (token) {
-      sessionStorage.setItem('authToken', token);
+    if (newToken) {
+      // Fetch user details if token is set
+      axios
+        .get('http://localhost:5000/api/auth/me', {
+          headers: { Authorization: `Bearer ${newToken}` },
+        })
+        .then((response) => {
+          setUser(response.data);
+          setIsLoggedIn(true);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch user details:', error);
+          setUser(null);
+          setIsLoggedIn(false);
+        });
     } else {
-      sessionStorage.removeItem('authToken');
+      setUser(null);
+      setIsLoggedIn(false);
     }
-    setTokenState(token);
+  };
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (!token) {
+        setIsLoggedIn(false);
+        setUser(null);
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:5000/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error('Failed to fetch user details:', error);
+        logout();
+      }
+    };
+
+    fetchUserDetails();
+  }, [token]);
+
+  const login = (newToken: string) => {
+    setToken(newToken);
+    localStorage.setItem('authToken', newToken);
   };
 
   const logout = () => {
-    setToken(null); // Clear the token from memory and sessionStorage
+    setToken(null);
+    localStorage.removeItem('authToken');
+    setUser(null);
+    setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ token, setToken, logout }}>
+    <AuthContext.Provider value={{ token, user, isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

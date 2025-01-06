@@ -1,5 +1,9 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FormField } from '../components/FormField';
+import { Button } from '../components/Button';
+import Modal from '../components/modal';
 
 const RegistrationPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -8,50 +12,97 @@ const RegistrationPage: React.FC = () => {
     password: '',
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  }>({ type: 'success', message: '' });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add registration logic here
+
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      setModalConfig({
+        type: 'success',
+        message: 'Отлично! Теперь войдите в ваш аккаунт'
+      });
+      setIsModalOpen(true);
+
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+    } catch (err: any) {
+      setModalConfig({
+        type: 'error',
+        message: err.response?.data?.message || 'Ошибка регистрации'
+      });
+      setIsModalOpen(true);
+    }
   };
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleRegister}>
-        <label>
-          Name:
+    <div className="form">
+      <h1 className="form__title">Регистрация</h1>
+      <form className="form__field" onSubmit={handleRegister} noValidate>
+        <FormField label='Имя'>
           <input
             type="text"
             name="name"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Email:
+        </FormField>
+        <FormField label='Email'>
           <input
             type="email"
             name="email"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Password:
+        </FormField>
+        <FormField label='Пароль'>
           <input
             type="password"
             name="password"
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChange={handleChange}
             required
           />
-        </label>
-        <button type="submit">Register</button>
+        </FormField>
+
+        <Button variant='primary' type="submit" title='Зарегистрироваться' />
       </form>
-      <p>
+      <p className="form__link">
         Есть аккаунт? <Link to="/login">Войти</Link>
       </p>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        type={modalConfig.type}
+        message={modalConfig.message}
+        autoClose={modalConfig.type === 'success'}
+        autoCloseTime={3000}
+      />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import path from 'path';
 
 // Helper function to generate a JWT token
 const generateToken = (id: string): string => {
@@ -38,12 +39,13 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     const token = generateToken(createdUser.id);
 
     // Respond with the created user's details and token
-    res.status(201).json({
-      id: createdUser.id,
-      name: createdUser.name,
-      email: createdUser.email,
-      token,
+    res.status(200).json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user.id),
     });
+
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -62,5 +64,27 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ id: user.id, name: user.name, email: user.email, token });
   } catch (error) {
     res.status(500).json({ message: (error as Error).message });
+  }
+};
+export const getAccountDetails = async (req: any, res: Response) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const fullLogoUrl = user.logo ? `http://localhost:5000${user.logo}` : null;
+
+    res.json({
+      id: user.id,
+      name: user.name,
+      surname: user.surname,
+      email: user.email,
+      phone: user.phone,
+      logo: fullLogoUrl,
+      appointments: user.appointments,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch user details' });
   }
 };

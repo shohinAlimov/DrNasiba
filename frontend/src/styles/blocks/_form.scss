@@ -1,18 +1,36 @@
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
 
-  &__error {
-    color: #f44336; // Red for errors
-    font-size: 0.9rem;
-    margin-top: 5px;
-    font-weight: 600;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &--auth {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
   }
 
-  &__description {
-    color: #888; // Light gray for descriptions
-    font-size: 0.8rem;
-    margin-top: 5px;
+  &__title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__link {
+    text-align: center;
+    margin-top: 20px;
+
+    a {
+      color: $color-cabaret;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
