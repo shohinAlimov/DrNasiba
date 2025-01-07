@@ -1,208 +1,293 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import { useAuth } from '../context/AuthContext';
-import { FormField } from '../components/FormField';
-import Modal from '../components/Modal';
+import React, { useState, useMemo, useEffect } from 'react';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
-interface Appointment {
-  name: string;
-  phone: string;
-  email: string;
-  description?: string;
-  date: string;
+export type AppointmentSlot = {
   time: string;
-}
+  status: 'Свободно' | 'Занято';
+};
 
-const AppointmentPage: React.FC = () => {
-  const { token } = useAuth();
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    description: '',
-    date: '',
-    time: '',
-  });
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [modalConfig, setModalConfig] = React.useState<{
-    type: 'success' | 'error';
-    message: string;
-  }>({ type: 'success', message: '' });
+export type AppointmentData = {
+  [key: string]: AppointmentSlot[];
+};
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      if (!token) {
-        setModalConfig({
-          type: 'error',
-          message: 'Для записи создайте аккаунт!'
-        });
-        setIsModalOpen(true);
+export type BookingFormData = {
+  date: Date;
+  time: string;
+};
 
-        // Navigate to register page after a short delay
-        const timer = setTimeout(() => {
-          navigate('/register');
-        }, 2000);
+const getDushanbeDate = (): Date => {
+  const nowUTC = new Date().toISOString();
+  const dushanbeOffset = 5 * 60 * 60 * 1000; // Dushanbe is UTC+5
+  const dushanbeDate = new Date(new Date(nowUTC).getTime() + dushanbeOffset);
+  return dushanbeDate;
+};
 
-        return () => clearTimeout(timer);
-      };
+const Appointments: React.FC = () => {
+  const [currentMonth, setCurrentMonth] = useState<Date>(getDushanbeDate());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [appointments, setAppointments] = useState<any>({});
+  const [loading, setLoading] = useState(false);
 
-      try {
-        const response = await axios.get('http://localhost:5000/api/auth/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  // Get today's date at midnight in Dushanbe time
+  const today = useMemo(() => {
+    const date = getDushanbeDate();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
 
-        const { name, phone, email } = response.data;
-        setFormData((prev) => ({
-          ...prev,
-          name,
-          phone: phone || '',
-          email,
-        }));
-      } catch (err: any) {
-        console.error('Failed to fetch user details.');
-      }
-    };
+  // Get the maximum selectable date (20 days from today)
+  const maxDate = useMemo(() => {
+    const date = getDushanbeDate();
+    date.setDate(date.getDate() + 20);
+    return date;
+  }, []);
 
-    fetchUserDetails();
-  }, [token, navigate]);
+  // Get the next day (tomorrow) in Dushanbe time
+  const nextDay = useMemo(() => {
+    const date = new Date(today);
+    date.setDate(date.getDate() + 1);
+    return date;
+  }, [today]);
 
-  const generateValidDates = () => {
-    const today = dayjs().tz('Asia/Dushanbe');
-    const dates = [];
-    for (let i = 1; i <= 20; i++) {
-      dates.push(today.add(i, 'day').format('YYYY-MM-DD'));
-    }
-    return dates;
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  // Fetch appointments from the backend
+  const fetchAppointments = async (date: Date) => {
+    setLoading(true);
+    const formattedDate = date.toISOString().split('T')[0];
     try {
-      const url = token
-        ? 'http://localhost:5000/api/appointments/with-account' // Logged-in user
-        : 'http://localhost:5000/api/appointments'; // Guest user
-      const headers = token
-        ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
-        : { 'Content-Type': 'application/json' };
-
-      const response = await axios.post(url, formData, { headers });
-      setAppointments([...appointments, response.data]);
-      setMessage('Appointment booked successfully!');
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        description: '',
-        date: '',
-        time: '',
-      });
-    } catch (err: any) {
-      setMessage(err.response?.data?.message || 'Failed to book appointment.');
+      const response = await fetch(
+        `/api/appointments?date=${formattedDate}`,
+        {
+          method: 'GET',
+        }
+      );
+      const data = await response.json();
+      setAppointments((prev: any) => ({
+        ...prev,
+        [formattedDate]: data,
+      }));
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Initialize `selectedDate` to `nextDay` if not already set
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDate(nextDay);
+    }
+  }, [nextDay, selectedDate]);
+
+  // Automatically select the first available time slot for the selected date
+  useEffect(() => {
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      if (!appointments[formattedDate]) {
+        fetchAppointments(selectedDate);
+      }
+      const availableSlots = appointments[formattedDate]?.filter(
+        (slot: any) => slot.status === 'Свободно'
+      );
+      if (availableSlots?.length) {
+        setSelectedTime(availableSlots[0].time);
+      } else {
+        setSelectedTime(null);
+      }
+    }
+  }, [selectedDate, appointments]);
+
+  // Check if a date is selectable (between today and maxDate, excluding today)
+  const isDateSelectable = (date: Date): boolean => {
+    return date > today && date <= maxDate;
+  };
+
+  // Format date into Russian long format with Dushanbe timezone
+  const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat('ru-RU', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'Asia/Dushanbe',
+    }).format(date);
+  };
+
+  // Handle date selection
+  const handleDateClick = (day: number): void => {
+    const newDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    if (isDateSelectable(newDate)) {
+      setSelectedDate(newDate);
+      setSelectedTime(null);
+    }
+  };
+
+  // Handle time slot selection
+  const handleTimeSelect = (time: string): void => {
+    setSelectedTime(time);
+  };
+
+  // Handle form submission to book an appointment
+  const handleSubmit = async (): Promise<void> => {
+    if (selectedDate && selectedTime) {
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      try {
+        const response = await fetch('/api/appointments/book', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            date: formattedDate,
+            time: selectedTime,
+          }),
+        });
+        const data = await response.json();
+        console.log('Booking confirmed:', data);
+        fetchAppointments(selectedDate); // Refresh appointments
+      } catch (error) {
+        console.error('Error booking appointment:', error);
+      }
+    }
+  };
+
+  // Render calendar days
+  const renderCalendarDays = (): JSX.Element[] => {
+    const days: JSX.Element[] = [];
+    const daysInMonth = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() + 1,
+      0
+    ).getDate();
+    const firstDay = (new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay() + 6) % 7;
+
+    for (let i = 0; i < firstDay; i++) {
+      days.push(
+        <div key={`empty-${i}`} className="calendar__day calendar__day--disabled" />
+      );
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth(),
+        day
+      );
+      const isSelected = selectedDate?.toDateString() === date.toDateString();
+      const isSelectable = isDateSelectable(date);
+
+      days.push(
+        <button
+          key={day}
+          className={`calendar__day 
+            ${isSelected ? 'calendar__day--selected' : ''} 
+            ${!isSelectable ? 'calendar__day--disabled' : ''}`}
+          onClick={() => handleDateClick(day)}
+          disabled={!isSelectable}
+        >
+          {day}
+        </button>
+      );
+    }
+
+    return days;
+  };
 
   return (
-    <section className='appointment'>
-      <div className="container">
-        <h1 className='appointment__title'>Запись на консультацию</h1>
+    <div className="calendar">
+      <div className="calendar__container">
+        <div className="calendar__header">
+          <button
+            className="calendar__nav"
+            onClick={() =>
+              setCurrentMonth(
+                (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1)
+              )
+            }
+          >
+            &lt;
+          </button>
+          <h3 className="calendar__month">
+            {new Intl.DateTimeFormat('ru-RU', {
+              month: 'long',
+              year: 'numeric',
+              timeZone: 'Asia/Dushanbe',
+            }).format(currentMonth)}
+          </h3>
+          <button
+            className="calendar__nav"
+            onClick={() =>
+              setCurrentMonth(
+                (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1)
+              )
+            }
+          >
+            &gt;
+          </button>
+        </div>
 
-        <form className='form__field' onSubmit={handleFormSubmit}>
-          <FormField label='Имя'>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </FormField>
+        <div className="calendar__weekdays">
+          {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
+            <div key={day} className="calendar__weekday">
+              {day}
+            </div>
+          ))}
+        </div>
 
-          <FormField label='Телефон'>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              required
-            />
-          </FormField>
-
-          <FormField label='Email'>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </FormField>
-
-          <label>
-            Select Date:
-            <select
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select a date</option>
-              {generateValidDates().map((date) => (
-                <option key={date} value={date}>
-                  {date}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Select Time:
-            <select
-              name="time"
-              value={formData.time}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select a time</option>
-              {['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'].map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button type="submit">Book Appointment</button>
-        </form>
-        {message && <p>{message}</p>}
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          type={modalConfig.type}
-          message={modalConfig.message}
-          autoClose={modalConfig.type === 'success'}
-          autoCloseTime={2000}
-        />
+        <div className="calendar__days">{renderCalendarDays()}</div>
       </div>
-    </section>
+
+      <div className="appointment-section">
+        {loading ? (
+          <p>Loading appointments...</p>
+        ) : selectedDate && (
+          <>
+            <h3 className="appointment-section__date">
+              {formatDate(selectedDate)}
+            </h3>
+            <div className="appointment-section__slots">
+              {appointments[selectedDate.toISOString().split('T')[0]]?.map(
+                (slot: any, index: number) => (
+                  <div key={index} className="appointment-section__slot">
+                    <button
+                      className={`appointment-section__time-btn 
+                      ${selectedTime === slot.time
+                          ? 'appointment-section__time-btn--selected'
+                          : ''
+                        } 
+                      ${slot.status === 'Занято'
+                          ? 'appointment-section__time-btn--disabled'
+                          : ''
+                        }`}
+                      onClick={() => handleTimeSelect(slot.time)}
+                      disabled={slot.status === 'Занято'}
+                    >
+                      {slot.time}
+                      <span className="appointment-section__status">
+                        {slot.status}
+                      </span>
+                    </button>
+                  </div>
+                )
+              )}
+            </div>
+            {selectedTime && (
+              <button
+                className="appointment-section__submit"
+                onClick={handleSubmit}
+              >
+                Подтвердить запись
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
-export default AppointmentPage;
+export default Appointments;

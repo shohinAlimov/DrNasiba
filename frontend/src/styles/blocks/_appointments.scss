@@ -1,0 +1,160 @@
+.calendar {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &__container {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__month {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  &__nav {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f7fafc;
+    }
+  }
+
+  &__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__weekday {
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  &__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+
+  &__day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover:not(&--disabled) {
+      background: #f7fafc;
+    }
+
+    &--selected {
+      background: #4299e1;
+      color: white;
+      border-color: #4299e1;
+
+      &:hover {
+        background: #3182ce;
+      }
+    }
+
+    &--disabled {
+      background: #f7fafc;
+      color: #a0aec0;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.appointment-section {
+  flex: 1;
+  min-width: 300px;
+
+  &__date {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  &__slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  &__time-btn {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+
+    &:hover:not(&--disabled) {
+      background: #f7fafc;
+    }
+
+    &--selected {
+      background: #4299e1;
+      color: white;
+      border-color: #4299e1;
+
+      &:hover {
+        background: #3182ce;
+      }
+    }
+
+    &--disabled {
+      background: #f7fafc;
+      color: #a0aec0;
+      cursor: not-allowed;
+    }
+  }
+
+  &__status {
+    font-size: 0.875rem;
+    color: inherit;
+  }
+
+  &__submit {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: #48bb78;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #38a169;
+    }
+  }
+}

@@ -662,4 +662,141 @@ textarea {
     opacity: 1;
     transform: translateY(0);
   }
+}
+.calendar {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.calendar__container {
+  flex: 1;
+  min-width: 300px;
+}
+.calendar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.calendar__month {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.calendar__nav {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.calendar__nav:hover {
+  background: #f7fafc;
+}
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.calendar__weekday {
+  text-align: center;
+  font-weight: 600;
+  color: #4a5568;
+}
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+.calendar__day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.calendar__day:hover:not(.calendar__day--disabled) {
+  background: #f7fafc;
+}
+.calendar__day--selected {
+  background: #4299e1;
+  color: white;
+  border-color: #4299e1;
+}
+.calendar__day--selected:hover {
+  background: #3182ce;
+}
+.calendar__day--disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.appointment-section {
+  flex: 1;
+  min-width: 300px;
+}
+.appointment-section__date {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.appointment-section__slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+}
+.appointment-section__time-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.appointment-section__time-btn:hover:not(.appointment-section__time-btn--disabled) {
+  background: #f7fafc;
+}
+.appointment-section__time-btn--selected {
+  background: #4299e1;
+  color: white;
+  border-color: #4299e1;
+}
+.appointment-section__time-btn--selected:hover {
+  background: #3182ce;
+}
+.appointment-section__time-btn--disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+.appointment-section__status {
+  font-size: 0.875rem;
+  color: inherit;
+}
+.appointment-section__submit {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: #48bb78;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.appointment-section__submit:hover {
+  background: #38a169;
 }/*# sourceMappingURL=style.css.map */
