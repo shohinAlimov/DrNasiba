@@ -16,11 +16,6 @@ app.use(cors({
   origin: 'http://localhost:5173', // Allow only the frontend's origin
 }));
 
-import appointmentRoutes from './routes/appointmentRoutes';
-
-app.use('/api/appointments', appointmentRoutes);
-
-
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use('/api/auth', authRoutes);

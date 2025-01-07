@@ -66,25 +66,3 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: (error as Error).message });
   }
 };
-export const getAccountDetails = async (req: any, res: Response) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const fullLogoUrl = user.logo ? `http://localhost:5000${user.logo}` : null;
-
-    res.json({
-      id: user.id,
-      name: user.name,
-      surname: user.surname,
-      email: user.email,
-      phone: user.phone,
-      logo: fullLogoUrl,
-      appointments: user.appointments,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch user details' });
-  }
-};

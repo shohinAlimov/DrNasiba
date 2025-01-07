@@ -14,9 +14,4 @@ router.get('/me', protect, getUserDetails); // Get user details
 router.put('/me', protect, updateUser); // Update user details
 router.put('/me/logo', protect, upload.single('logo'), uploadLogo); // Upload and update user logo
 
-import { addAppointment, getAppointments } from '../controllers/userController';
-
-router.post('/appointments', protect, addAppointment); // Add an appointment
-router.get('/appointments', protect, getAppointments); // Get all appointments
-
 export default router;

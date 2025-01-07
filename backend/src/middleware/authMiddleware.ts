@@ -1,8 +1,9 @@
 // middleware/authMiddleware.ts
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 
-export const protect = async (req: Request, res: Response, next: NextFunction) => {
+export const protect = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   let token;
 
   if (req.headers.authorization?.startsWith("Bearer")) {
