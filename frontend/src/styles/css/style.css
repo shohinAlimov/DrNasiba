@@ -554,14 +554,22 @@ textarea {
   color: #999;
 }
 
-.form {
-  max-width: 800px;
-  margin: 0 auto;
+.form label {
+  margin: 0 0 10px 0;
+}
+.form__error {
+  display: block;
+  margin-top: 6px;
+  color: #f44336;
+  font-size: 14px;
 }
 .form--auth {
   max-width: 400px;
   margin: 40px auto;
   padding: 20px;
+}
+.form--auth label {
+  margin: 0;
 }
 .form__title {
   text-align: center;
@@ -594,6 +602,12 @@ textarea {
 
 .file-input {
   cursor: pointer;
+}
+
+.account__top-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .modal {

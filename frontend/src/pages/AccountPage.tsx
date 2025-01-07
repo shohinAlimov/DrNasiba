@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { FormField } from '../components/FormField';
 import { Button } from '../components/Button';
+import Modal from '../components/Modal';
 
 const AccountPage: React.FC = () => {
   const { token, user, logout } = useAuth();
@@ -14,6 +15,12 @@ const AccountPage: React.FC = () => {
   });
   const [logo, setLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [modalConfig, setModalConfig] = React.useState<{
+    type: 'success' | 'error';
+    message: string;
+  }>({ type: 'success', message: '' });
+
 
   useEffect(() => {
     if (user) {
@@ -58,29 +65,32 @@ const AccountPage: React.FC = () => {
   });
 
   const validateFields = (): boolean => {
-    const newErrors: { name: string; surname: string, phone: string; email: string } = {
+    const newErrors: { name: string; surname: string; phone: string; email: string } = {
       name: "",
       surname: "",
       phone: "",
       email: "",
     };
 
+    // Validate name
     if (!formData.name) {
       newErrors.name = "Заполните данное поле";
+    } else if (formData.name.length <= 3) {
+      newErrors.name = "Короткое имя!";
     }
 
-    if (formData.name.length <= 3) {
-      newErrors.name = "Короткое имя!"
-    }
-
+    // Validate surname
     if (formData.surname && formData.surname.length <= 5) {
-      newErrors.surname = "Фамилия короткая"
+      newErrors.surname = "Фамилия короткая";
     }
 
-    if (!formData.phone || !/^(\+992)[0-9]{9}$/.test(formData.phone)) {
+    // Validate phone (must start with "+992 " and have exactly 9 digits after the space)
+    const phoneWithoutPrefix = formData.phone.replace("+992 ", ""); // Remove the prefix for validation
+    if (!formData.phone.startsWith("+992 ") || phoneWithoutPrefix.length !== 9 || !/^\d{9}$/.test(phoneWithoutPrefix)) {
       newErrors.phone = "Телефон должен начинаться с +992 и содержать 9 цифр.";
     }
 
+    // Validate email
     if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Введите корректный email адрес.";
     }
@@ -117,7 +127,11 @@ const AccountPage: React.FC = () => {
         });
       }
 
-      console.log('Account updated successfully!');
+      setModalConfig({
+        type: 'success',
+        message: 'Ваши данные сохранены!'
+      });
+      setIsModalOpen(true);
     } catch (err: any) {
       console.log(err.response?.data?.message || 'Failed to update account.');
     }
@@ -131,7 +145,7 @@ const AccountPage: React.FC = () => {
         <h1 className="account__title">Мой аккаунт</h1>
         <Button className="" type="button" title="Выйти" variant="primary" onClick={handleLogout} />
       </div>
-      <form className="form" onSubmit={handleFormSubmit} >
+      <form className="form__field" onSubmit={handleFormSubmit} >
         <FormField label="Имя">
           <input
             type="text"
@@ -155,11 +169,30 @@ const AccountPage: React.FC = () => {
           <input
             type="tel"
             name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
+            value={formData.phone} // The full value including "+992 "
+            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+              let value = e.target.value;
+
+              // Ensure the value always starts with "+992 " (with a space)
+              if (!value.startsWith("+992 ")) {
+                value = `+992 ${value.replace(/^\+992 ?/, "")}`;
+              }
+
+              // Remove any non-numeric characters after "+992 "
+              value = value.replace(/^\+992\s?[^\d]*/, "+992 ").replace(/[^+\d\s]/g, "");
+
+              setFormData((prevData) => ({
+                ...prevData,
+                phone: value,
+              }));
+            }}
+            maxLength={14} // "+992 " (5 chars) + 9 digits
+            required
+            placeholder="+992 123456789" // Provide a clear example
           />
           {errors.phone && <span className="form__error">{errors.phone}</span>}
         </FormField>
+
         <FormField label="Email">
           <input
             type="email"
@@ -193,6 +226,15 @@ const AccountPage: React.FC = () => {
 
         <Button type="submit" title="Сохранить" variant="primary" />
       </form>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        type={modalConfig.type}
+        message={modalConfig.message}
+        autoClose={modalConfig.type === 'success'}
+        autoCloseTime={2000}
+      />
     </div>
   );
 };

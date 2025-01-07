@@ -1,12 +1,24 @@
 .form {
 
-  max-width: 800px;
-  margin: 0 auto;
+  & label {
+    margin: 0 0 10px 0;
+  }
+
+  &__error {
+    display: block;
+    margin-top: 6px;
+    color: #f44336;
+    font-size: 14px;
+  }
 
   &--auth {
     max-width: 400px;
     margin: 40px auto;
     padding: 20px;
+
+    & label {
+      margin: 0;
+    }
   }
 
   &__title {

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useAuth } from '../context/AuthContext';
+import { FormField } from '../components/FormField';
+import Modal from '../components/Modal';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,10 +32,29 @@ const AppointmentPage: React.FC = () => {
   });
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [modalConfig, setModalConfig] = React.useState<{
+    type: 'success' | 'error';
+    message: string;
+  }>({ type: 'success', message: '' });
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      if (!token) return;
+      if (!token) {
+        setModalConfig({
+          type: 'error',
+          message: 'Для записи создайте аккаунт!'
+        });
+        setIsModalOpen(true);
+
+        // Navigate to register page after a short delay
+        const timer = setTimeout(() => {
+          navigate('/register');
+        }, 2000);
+
+        return () => clearTimeout(timer);
+      };
 
       try {
         const response = await axios.get('http://localhost:5000/api/auth/me', {
@@ -53,7 +74,7 @@ const AppointmentPage: React.FC = () => {
     };
 
     fetchUserDetails();
-  }, [token]);
+  }, [token, navigate]);
 
   const generateValidDates = () => {
     const today = dayjs().tz('Asia/Dushanbe');
@@ -101,91 +122,86 @@ const AppointmentPage: React.FC = () => {
 
 
   return (
-    <div>
-      <h1>Book an Appointment</h1>
-      {!token && (
-        <p>
-          Если вы не хотите заполнять данные каждый раз, просим вас создать аккаунт.{' '}
-          <Link to="/register">Регистрация</Link>
-        </p>
-      )}
+    <section className='appointment'>
+      <div className="container">
+        <h1 className='appointment__title'>Запись на консультацию</h1>
 
-      <form onSubmit={handleFormSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Phone:
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Description (Optional):
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-          />
-        </label>
-        <label>
-          Select Date:
-          <select
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">Select a date</option>
-            {generateValidDates().map((date) => (
-              <option key={date} value={date}>
-                {date}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Select Time:
-          <select
-            name="time"
-            value={formData.time}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">Select a time</option>
-            {['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'].map((time) => (
-              <option key={time} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="submit">Book Appointment</button>
-      </form>
+        <form className='form__field' onSubmit={handleFormSubmit}>
+          <FormField label='Имя'>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+            />
+          </FormField>
 
-      {message && <p>{message}</p>}
-    </div>
+          <FormField label='Телефон'>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+            />
+          </FormField>
+
+          <FormField label='Email'>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </FormField>
+
+          <label>
+            Select Date:
+            <select
+              name="date"
+              value={formData.date}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select a date</option>
+              {generateValidDates().map((date) => (
+                <option key={date} value={date}>
+                  {date}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Select Time:
+            <select
+              name="time"
+              value={formData.time}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select a time</option>
+              {['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'].map((time) => (
+                <option key={time} value={time}>
+                  {time}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit">Book Appointment</button>
+        </form>
+        {message && <p>{message}</p>}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          type={modalConfig.type}
+          message={modalConfig.message}
+          autoClose={modalConfig.type === 'success'}
+          autoCloseTime={2000}
+        />
+      </div>
+    </section>
   );
 };
 

@@ -20,16 +20,21 @@ export const Header = () => {
                   Главная
                 </NavLink>
               </li>
-              <li className="navigation__item">
-                <NavLink
-                  to="/appointments"
-                  className={({ isActive }) =>
-                    isActive ? "navigation__link navigation__link--active" : "navigation__link"
-                  }
-                >
-                  Консультация
-                </NavLink>
-              </li>
+              {isLoggedIn ? (
+                <li className="navigation__item">
+                  <NavLink
+                    to="/appointments"
+                    className={({ isActive }) =>
+                      isActive ? "navigation__link navigation__link--active" : "navigation__link"
+                    }
+                  >
+                    Консультация
+                  </NavLink>
+                </li>
+              ) : (
+                <></>
+              )}
+
               <li className="navigation__item">
                 <NavLink
                   to="/about"

@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { FormField } from '../components/FormField';
 import { Button } from '../components/Button';
-import Modal from '../components/modal';
+import Modal from '../components/Modal';
+import { useForm } from 'react-hook-form';
+
+interface LoginFormInputs {
+  email: string;
+  password: string;
+}
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalConfig, setModalConfig] = useState<{
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [modalConfig, setModalConfig] = React.useState<{
     type: 'success' | 'error';
     message: string;
   }>({ type: 'success', message: '' });
@@ -18,15 +23,9 @@ const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password
-      });
-
+      const response = await axios.post('http://localhost:5000/api/auth/login', data);
       const { token } = response.data;
 
       if (!token) {
@@ -45,7 +44,6 @@ const LoginPage: React.FC = () => {
       });
       setIsModalOpen(true);
 
-      // Redirect after modal shows
       setTimeout(() => {
         navigate('/account');
       }, 2000);
@@ -61,24 +59,39 @@ const LoginPage: React.FC = () => {
   return (
     <div className="form form--auth">
       <h1 className="form__title">Вход</h1>
-      <form className="form__field" onSubmit={handleLogin} noValidate>
-
+      <form className="form__field" onSubmit={handleSubmit(onSubmit)} noValidate>
         <FormField label='Email'>
           <input
+            className={`form__input ${errors.email ? 'form__input--error' : ''}`}
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            {...register('email', {
+              required: 'Email обязателен',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Неверный формат email'
+              }
+            })}
           />
+          {errors.email && (
+            <span className="form__error">{errors.email.message}</span>
+          )}
         </FormField>
 
         <FormField label='Пароль'>
           <input
+            className={`form__input ${errors.password ? 'form__input--error' : ''}`}
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            {...register('password', {
+              required: 'Пароль обязателен',
+              pattern: {
+                value: /^(?=.*[A-Z])(?=.*\d.*\d).{6,}$/,
+                message: 'Неверный пароль'
+              }
+            })}
           />
+          {errors.password && (
+            <span className="form__error">{errors.password.message}</span>
+          )}
         </FormField>
 
         <Button variant='primary' title='Войти' type="submit" />
