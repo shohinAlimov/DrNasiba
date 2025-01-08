@@ -6,12 +6,28 @@ import { upload } from '../middleware/uploadMiddleware';
 
 const router = express.Router();
 
+// Public routes - these use regular Request type
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 
-// Protected routes
-router.get('/me', protect, getUserDetails); // Get user details
-router.put('/me', protect, updateUser); // Update user details
-router.put('/me/logo', protect, upload.single('logo'), uploadLogo); // Upload and update user logo
+// Protected routes - need type assertions for middleware and handlers
+router.get(
+  '/me',
+  protect as express.RequestHandler,
+  getUserDetails as express.RequestHandler
+);
+
+router.put(
+  '/me',
+  protect as express.RequestHandler,
+  updateUser as express.RequestHandler
+);
+
+router.put(
+  '/me/logo',
+  protect as express.RequestHandler,
+  upload.single('logo'),
+  uploadLogo as express.RequestHandler
+);
 
 export default router;

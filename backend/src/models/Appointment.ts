@@ -4,6 +4,7 @@ export interface IAppointment extends Document {
   date: Date;
   time: string;
   status: 'Свободно' | 'Занято';
+  userId: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,6 +22,11 @@ const AppointmentSchema: Schema = new Schema({
     type: String,
     enum: ['Свободно', 'Занято'],
     default: 'Свободно',
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true

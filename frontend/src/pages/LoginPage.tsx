@@ -28,6 +28,7 @@ const LoginPage: React.FC = () => {
       const response = await axios.post('http://localhost:5000/api/auth/login', data);
       const { token } = response.data;
 
+
       if (!token) {
         setModalConfig({
           type: 'error',
